@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<title>AC Demo</title>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/ac.js"></script>
+<style type="text/css">
+.text-container {
+	width: 1000px;
+}
+.text-area {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #E9E9E9;
+    border-color: #D9D9D9 #D9D9D9 -moz-use-text-color;
+    border-style: solid solid none;
+    border-width: 1px 1px medium;
+    color: #666666;
+    font-size: 12px;
+    padding: 5px;
+    width: 45%;
+    margin: 5px;
+}
+.text-area textarea {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #CCCCCC #DDDDDD #DDDDDD #CCCCCC;
+    border-style: solid;
+    border-width: 1px;
+    font-family: Monaco,Courier,"DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
+    font-size: 12px;
+    height: 100px;
+    margin: 10px;
+    width: 96%;
+}
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+.clear { clear: both;}
+.input-title {
+    border-bottom: 1px solid #DDDDDD;
+    margin: 0px;
+}
+.button-container {
+	margin: 10px;
+	font-size: 14px;
+}
+</style>
+</head>
+<body>
+	<h2>AC Demo</h2>
+	<div>
+		<div class='text-container'>
+			<div class="text-area left">
+				<h2 class='input-title'>Keys</h2>
+				<textarea id='keys'></textarea>
+			</div>
+			<div class="text-area right">
+				<h2 class='input-title'>Text</h2>
+				<textarea id='text'></textarea>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<div class='button-container'>
+			<button id="insert">insert</button>
+			<button id="compile">compile</button>
+			<button id="match">match</button>
+			<button id="gendot">gendot</button>
+		</div>
+
+		<div class='text-container'>
+			<div class="text-area left">
+				<h2  class='input-title'>Found Keys</h2>
+				<textarea id='found-keys'></textarea>
+			</div>
+			<div class="text-area right">
+				<h2 class='input-title'>Dot</h2>
+				<textarea id='dot'></textarea>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<div id='graph'></div>
+	</div>
+
+</body>
+</html>
