@@ -95,27 +95,26 @@ balgo.ac = {
 			}
 			return keys;
 		};
+		this.clear = function() {
+			function dfs(p) {
+				for (var cl in p.children) {
+					dfs(p.children[cl]);
+					p.children[cl] = null;
+				}
+			}
+			dfs(root);
+			root = null;
+			id = 0;
+			root = new balgo.ac.Node(id++, 'root');
+		};
 		
 		function nodeId(node) {
-			return '#' + node.id + '-' + node.label;
+			return node.id + '-' + node.label;
 		}
-		this.toTreeJson = function() {
-			function dfs(node) {
-				var json = {'name': nodeId(node), 'children': []};
-				for (var label in node.children) {
-					child = node.children[label];
-					var cjson = dfs(child);
-					json.children.push(cjson);
-				}
-				return json;
-			}
-			var json = dfs(root);
-			return json;
-		};
-		this.toForceData = function() {
-			function edge(src, tgt, type) {
-				return {'source': nodeId(src), 'target': nodeId(tgt), 'type': type};
-			}
+		function edge(src, tgt, type) {
+			return {'source': nodeId(src), 'target': nodeId(tgt), 'type': type};
+		}
+		this.treeData = function() {
 			function dfs(node, edges) {
 				if (node.fail != root) {
 					edges.push(edge(node, node.fail, 'fail'));
@@ -123,155 +122,127 @@ balgo.ac = {
 				if (node.report) {
 					edges.push(edge(node, node.report, 'report'));
 				}
+				var json = {'name': nodeId(node), 'children': []};
 				for (var label in node.children) {
 					child = node.children[label];
 					edges.push(edge(node, child, 'normal'));
-					dfs(child, edges);
+					var cjson = dfs(child, edges);
+					json.children.push(cjson);
 				}
+				return json;
 			}
 			var edges = [];
-			dfs(root, edges);
-			console.log(edges);
-			return edges;
+			var json = dfs(root, edges);
+			return {'json': json, 'edges': edges};
 		};
 	}
 };
 
-var width = 960,
-height = 500;
+var width = 2000,
+height = 1000;
+var radius = 22;
+var level_height = 100;
 
 var tree = d3.layout.tree().size([ height - 20, width - 20]);
 var diagonal = d3.svg.diagonal();
 
-function drawTree(svg, json) {
+function drawLine(src, tgt) {
+	/*var dx = tgt.x - src.x,
+    dy = tgt.y - src.y,
+    a = Math.atan2(dy, dx),
+    ex = radius * Math.sin(a),
+    ey = radius * Math.cos(a);
+	return { src: {x: src.x + ex, y: src.y + ey}, tgt: {x: tgt.x - ex, y: tgt.y - ey} };*/
+	var dx = tgt.x - src.x,
+    dy = src.y - tgt.y,
+    a = Math.atan2(dy, dx),
+    ey = radius * Math.sin(a),
+    ex = radius * Math.cos(a);
+	console.log('---drawLine---');
+	console.log(src);
+	console.log(tgt);
+	console.log('ex=' + ex + ', ey=' + ey);
+	return { src: {x: src.x + ex, y: src.y - ey}, tgt: {x: tgt.x - ex, y: tgt.y + ey} };
+}
+
+function clearTree(svg) {
+	svg.selectAll('g.tree').remove();	
+}
+
+function drawTree(svg, json, edges) {
+	clearTree(svg);
+	
+	var gtree = svg.append('g').attr('class', 'tree');
 	var nodes = tree.nodes(json);
 	// Normalize for fixed-depth.
-	nodes.forEach(function(d) { d.y = d.depth * 50; });
-
-	var link = svg.selectAll("path.link").data(tree.links(nodes))
-			.enter().append("path").attr("class", "link normal")
-		    .attr("marker-end", function(d) { return "url(#normal)"; })
-		    .attr("d", diagonal);
-
-	var node = svg.selectAll("g.node")
+	nodes.forEach(function(d) { d.y = radius + d.depth * level_height; });
+	
+//	console.log(nodes);
+//	console.log(tree.links(nodes));
+//	console.log(edges);
+	
+	var id2node = {};
+	nodes.forEach(function(node) { id2node[node.name] = node; });
+//	console.log(id2node);
+	var links = gtree.selectAll("path.link").data(edges)
+		.enter().append("path")
+		.attr("class", function(d) { return "link " + d.type;})
+	    .attr("marker-end", function(d) { return "url(#" + d.type + ")"; })
+	    .attr("d", function(d) {
+	    	var src = id2node[d.source];
+	    	var tgt = id2node[d.target];
+	    	if (d.type == 'fail') {
+	    		var dx = tgt.x - src.x,
+	            dy = tgt.y - src.y,
+	            dr = 2 * Math.sqrt(dx * dx + dy * dy);
+	    		return "M" + src.x + "," + src.y + "A" + dr + "," + dr + " 0 0,1 " + tgt.x + "," + tgt.y;
+	    	} else if (d.type == 'report') {
+	    		var dx = tgt.x - src.x,
+	            dy = tgt.y - src.y,
+	            dr = 2 * Math.sqrt(dx * dx + dy * dy);
+	    		return "M" + src.x + "," + src.y + "A" + dr + "," + dr + " 0 0,0 " + tgt.x + "," + tgt.y;
+	    	}
+	    	return "M" + src.x + "," + src.y + " L" + tgt.x + "," + tgt.y;
+//	    	line = drawLine(src, tgt);
+//	    	console.log(line);
+//	    	return "M" + line.src.x + "," + line.src.y + " L" + line.tgt.x + "," + line.tgt.y;
+	  });
+	
+	var node = gtree.selectAll("g.node")
 		.data(nodes, function(d) { return d.name; })
 		.enter().append("g")
 		.attr("class", "node")
 		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
-	node.append("circle").attr("r", 4.5);
+	node.append("circle").attr("r", radius);
 
-	node.append("text").attr("dx", 5)
-		.attr("dy", function(d) { return 3; })
-		.attr("text-anchor", function(d) { return "start"; })
+	node.append("text").attr("dx", 0)
+		.attr("dy", 4)
+		.attr("text-anchor", function(d) { return "middle"; })
 		.text(function(d) { return d.name; });
-}
-
-function drawForce(svg, links) {
-	//sort links by source, then target
-	links.sort(function(a,b) {
-	    if (a.source > b.source) {return 1;}
-	    else if (a.source < b.source) {return -1;}
-	    else {
-	        if (a.target > b.target) {return 1;}
-	        if (a.target < b.target) {return -1;}
-	        else {return 0;}
-	    }
-	});
-	//any links with duplicate source and target get an incremented 'linknum'
-	for (var i=0; i<links.length; i++) {
-	    if (i != 0 &&
-	        links[i].source == links[i-1].source &&
-	        links[i].target == links[i-1].target) {
-	            links[i].linknum = links[i-1].linknum + 1;
-	        }
-	    else {links[i].linknum = 1;};
-	};
-
-	var nodes = {};
-
-	// Compute the distinct nodes from the links.
-	links.forEach(function(link) {
-	  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
-	  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
-	});
-
-	var force = d3.layout.force()
-	    .nodes(d3.values(nodes))
-	    .links(links)
-	    .size([width, height])
-	    .linkDistance(60)
-	    .charge(-300)
-	    .on("tick", tick)
-	    .start();
-
-	var path = svg.append("svg:g").selectAll("path")
-	    .data(force.links())
-	  .enter().append("svg:path")
-	    .attr("class", function(d) { return "link " + d.type; })
-	    .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
-
-	var circle = svg.append("svg:g").selectAll("circle")
-	    .data(force.nodes())
-	  .enter().append("svg:circle")
-	    .attr("r", 6)
-	    .call(force.drag);
-
-	var text = svg.append("svg:g").selectAll("g")
-	    .data(force.nodes())
-	  .enter().append("svg:g");
-
-	// A copy of the text with a thick white stroke for legibility.
-	text.append("svg:text")
-	    .attr("x", 8)
-	    .attr("y", ".31em")
-	    .attr("class", "shadow")
-	    .text(function(d) { return d.name; });
-
-	text.append("svg:text")
-	    .attr("x", 8)
-	    .attr("y", ".31em")
-	    .text(function(d) { return d.name; });
-
-	// Use elliptical arc path segments to doubly-encode directionality.
-	function tick() {
-	  path.attr("d", function(d) {
-	    var dx = d.target.x - d.source.x,
-	        dy = d.target.y - d.source.y,
-	        //dr = Math.sqrt(dx * dx + dy * dy);
-	    	dr = 75/d.linknum;
-	    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-	  });
-
-	  circle.attr("transform", function(d) {
-	    return "translate(" + d.x + "," + d.y + ")";
-	  });
-
-	  text.attr("transform", function(d) {
-	    return "translate(" + d.x + "," + d.y + ")";
-	  });
-	}
 }
 
 function initSvg() {
 	var svg = d3.select("#graph").append("svg").attr("width", width).attr(
-			"height", height).append("g").attr("transform",
+			"height", height);
+	var defs = svg.append("g").attr("transform",
 			"translate(0, 10)");
 	
 	// Per-type markers, as they don't inherit styles.
-	svg.append("svg:defs").selectAll("marker")
+	defs.append("svg:defs").selectAll("marker")
 	    .data(["normal", "fail", "report"])
 	  .enter().append("svg:marker")
 	    .attr("id", String)
 	    .attr("viewBox", "0 -5 10 10")
-	    .attr("refX", 15)
-	    .attr("refY", -1.5)
+	    .attr("refX", radius * 1.6)
+	    .attr("refY", 0)
 	    .attr("markerWidth", 6)
 	    .attr("markerHeight", 6)
 	    .attr("orient", "auto")
 	  .append("svg:path")
 	    .attr("d", "M0,-5L10,0L0,5");
 	
+//	var g = svg.append('g').attr('class', 'tree');
 	return svg;
 }
 	
@@ -280,8 +251,10 @@ $(document).ready(function(){
 
 	var svg = initSvg();
 	
-	$('#keys').val('abcd\nbc\n码农');
-	$('#text').val('码农啊abcd');
+//	$('#keys').val('abcd\nbc\n码农');
+//	$('#text').val('码农啊abcd');
+	$('#keys').val('abc\nbc\nb');
+	$('#text').val('abcd');
 	
 	//ac = new balgo.ac();
 	//matcher = new ac.Matcher();
@@ -294,7 +267,6 @@ $(document).ready(function(){
 		keys.forEach(matcher.insert);
 	});
 	$('#compile').click(function() {
-		$('#insert').click();
 		matcher.compile();
 	});
 	$('#match').click(function() {
@@ -306,14 +278,20 @@ $(document).ready(function(){
 		$('#found-keys').val(keystr);
 	});
 	$('#gentree').click(function() {
-		var json = matcher.toTreeJson();
-		$('#graph-data').val(json.toSource());
-		drawTree(svg, json);
-	});
-	$('#genforce').click(function() {
-		var data = matcher.toForceData();
+		// debug
+		$('#insert').click();
+		$('#compile').click();
+		
+		var data = matcher.treeData();
 		$('#graph-data').val(data.toSource());
-		drawForce(svg, data);
+		drawTree(svg, data.json, data.edges);
 	});
+	$('#clear').click(function() {
+		matcher.clear();
+		clearTree(svg);
+	});
+	
+	// debug
+	$('#gentree').click();
 
 });
