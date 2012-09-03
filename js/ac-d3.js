@@ -144,26 +144,6 @@ var radius = 22;
 var level_height = 100;
 
 var tree = d3.layout.tree().size([ height - 20, width - 20]);
-var diagonal = d3.svg.diagonal();
-
-function drawLine(src, tgt) {
-	/*var dx = tgt.x - src.x,
-    dy = tgt.y - src.y,
-    a = Math.atan2(dy, dx),
-    ex = radius * Math.sin(a),
-    ey = radius * Math.cos(a);
-	return { src: {x: src.x + ex, y: src.y + ey}, tgt: {x: tgt.x - ex, y: tgt.y - ey} };*/
-	var dx = tgt.x - src.x,
-    dy = src.y - tgt.y,
-    a = Math.atan2(dy, dx),
-    ey = radius * Math.sin(a),
-    ex = radius * Math.cos(a);
-	console.log('---drawLine---');
-	console.log(src);
-	console.log(tgt);
-	console.log('ex=' + ex + ', ey=' + ey);
-	return { src: {x: src.x + ex, y: src.y - ey}, tgt: {x: tgt.x - ex, y: tgt.y + ey} };
-}
 
 function clearTree(svg) {
 	svg.selectAll('g.tree').remove();	
@@ -203,9 +183,6 @@ function drawTree(svg, json, edges) {
 	    		return "M" + src.x + "," + src.y + "A" + dr + "," + dr + " 0 0,0 " + tgt.x + "," + tgt.y;
 	    	}
 	    	return "M" + src.x + "," + src.y + " L" + tgt.x + "," + tgt.y;
-//	    	line = drawLine(src, tgt);
-//	    	console.log(line);
-//	    	return "M" + line.src.x + "," + line.src.y + " L" + line.tgt.x + "," + line.tgt.y;
 	  });
 	
 	var node = gtree.selectAll("g.node")
@@ -279,6 +256,15 @@ $(document).ready(function(){
 	});
 	$('#gentree').click(function() {
 		// debug
+		$('#insert').click();
+		$('#compile').click();
+		
+		var data = matcher.treeData();
+		$('#graph-data').val(data.toSource());
+		drawTree(svg, data.json, data.edges);
+	});
+
+	$('#gentrie').click(function() {
 		$('#insert').click();
 		$('#compile').click();
 		
