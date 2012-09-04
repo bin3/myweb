@@ -142,6 +142,8 @@ var width = 2000,
 height = 1000;
 var radius = 22;
 var level_height = 100;
+var duration = 1000;
+var delay = 500;
 
 var tree = d3.layout.tree().size([ height - 20, width - 20]);
 
@@ -199,6 +201,70 @@ function drawTree(svg, json, edges) {
 		.text(function(d) { return d.name; });
 }
 
+function drawTrie(svg, json, edges) {
+	clearTree(svg);
+	
+	var gtree = svg.append('g').attr('class', 'tree');
+	var nodes = tree.nodes(json);
+	// Normalize for fixed-depth.
+	nodes.forEach(function(d) { d.y = radius + d.depth * level_height; });
+	
+	var id2node = {};
+	nodes.forEach(function(node) { id2node[node.name] = node; });
+	
+	var links = gtree.selectAll("path.link").data(edges)
+		.enter().append("path")
+		.attr("class", function(d) { return "link " + d.type;})
+	    .attr("marker-end", function(d) { return "url(#" + d.type + ")"; })
+	    .attr("d", function(d) {
+	    	var src = id2node[d.source];
+	    	var tgt = id2node[d.target];
+	    	if (d.type == 'fail') {
+	    		var dx = tgt.x - src.x,
+	            dy = tgt.y - src.y,
+	            dr = 2 * Math.sqrt(dx * dx + dy * dy);
+	    		return "M" + src.x + "," + src.y + "A" + dr + "," + dr + " 0 0,1 " + tgt.x + "," + tgt.y;
+	    	} else if (d.type == 'report') {
+	    		var dx = tgt.x - src.x,
+	            dy = tgt.y - src.y,
+	            dr = 2 * Math.sqrt(dx * dx + dy * dy);
+	    		return "M" + src.x + "," + src.y + "A" + dr + "," + dr + " 0 0,0 " + tgt.x + "," + tgt.y;
+	    	}
+	    	return "M" + src.x + "," + src.y + " L" + tgt.x + "," + tgt.y;
+	  });
+	gtree.selectAll('path.fail').attr('visibility', 'hidden');
+	gtree.selectAll('path.report').attr('visibility', 'hidden');
+//	console.log(gtree.selectAll('path.report'));
+	
+	var node = gtree.selectAll("g.node")
+		.data(nodes, function(d) { return d.name; })
+		.enter().append("g")
+		.attr("class", "node")
+		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+	node.append("circle").attr("r", radius);
+
+	node.append("text").attr("dx", 0)
+		.attr("dy", 4)
+		.attr("text-anchor", function(d) { return "middle"; })
+		.text(function(d) { return d.name; });
+}
+
+function showfail(svg) {
+	svg.selectAll('path.fail').attr('visibility', 'visible');
+}
+
+function toggle(svg, selector) {
+	svg.selectAll(selector).attr('visibility', function(d) {
+		if (this.getAttribute('visibility') == 'hidden') {
+			return 'visible';
+		} else {
+			return 'hidden';
+		}
+	});
+//	.transition().delay(delay);
+}
+
 function initSvg() {
 	var svg = d3.select("#graph").append("svg").attr("width", width).attr(
 			"height", height);
@@ -228,7 +294,7 @@ $(document).ready(function(){
 
 	var svg = initSvg();
 	
-//	$('#keys').val('abcd\nbc\n码农');
+//	$('#keys').val('abcd\nbc\n码农\n码农abc\n农\n我是码农');
 //	$('#text').val('码农啊abcd');
 	$('#keys').val('abc\nbc\nb');
 	$('#text').val('abcd');
@@ -270,7 +336,13 @@ $(document).ready(function(){
 		
 		var data = matcher.treeData();
 		$('#graph-data').val(data.toSource());
-		drawTree(svg, data.json, data.edges);
+		drawTrie(svg, data.json, data.edges);
+	});
+	$('#genfail').click(function() {
+		toggle(svg, 'path.fail');
+	});
+	$('#genreport').click(function() {
+		toggle(svg, 'path.report');
 	});
 	$('#clear').click(function() {
 		matcher.clear();
@@ -278,6 +350,6 @@ $(document).ready(function(){
 	});
 	
 	// debug
-	$('#gentree').click();
+	$('#gentrie').click();
 
 });
