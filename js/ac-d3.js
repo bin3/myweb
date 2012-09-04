@@ -207,7 +207,7 @@ function drawTrie(svg, json, edges) {
 	var gtree = svg.append('g').attr('class', 'tree');
 	var nodes = tree.nodes(json);
 	// Normalize for fixed-depth.
-	nodes.forEach(function(d) { d.y = radius + d.depth * level_height; });
+	nodes.forEach(function(d) { d.y = 5 + radius + d.depth * level_height; });
 	
 	var id2node = {};
 	nodes.forEach(function(node) { id2node[node.name] = node; });
@@ -326,7 +326,6 @@ $(document).ready(function(){
 		$('#compile').click();
 		
 		var data = matcher.treeData();
-		$('#graph-data').val(data.toSource());
 		drawTree(svg, data.json, data.edges);
 	});
 
@@ -335,7 +334,6 @@ $(document).ready(function(){
 		$('#compile').click();
 		
 		var data = matcher.treeData();
-		$('#graph-data').val(data.toSource());
 		drawTrie(svg, data.json, data.edges);
 	});
 	$('#genfail').click(function() {

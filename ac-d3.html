@@ -9,8 +9,16 @@
 <script type="text/javascript" src="js/d3.v2.js"></script>
 <script type="text/javascript" src="js/ac-d3.js"></script>
 <style type="text/css">
-.text-container {
-	width: 1000px;
+#main-container {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+    width: 1000px;
+}
+h2 {
+	margin: 5px;
+}
+#text-container {
 }
 .text-area {
     -moz-border-bottom-colors: none;
@@ -25,7 +33,7 @@
     color: #666666;
     font-size: 12px;
     padding: 5px;
-    width: 45%;
+    width: 30%;
     margin: 5px;
 }
 .text-area textarea {
@@ -86,6 +94,9 @@ circle {
 	stroke: #333;
 	stroke-width: 1.5px;
 }
+circle.final {
+	stroke-width: 3px;
+}
 
 text {
 	font: 14px sans-serif;
@@ -104,16 +115,21 @@ text.shadow {
 </style>
 </head>
 <body>
+<div id='main-container'>
 	<h2>AC Demo</h2>
 	<div>
-		<div class='text-container'>
+		<div id='text-container'>
 			<div class="text-area left">
 				<h2 class='input-title'>Keys</h2>
 				<textarea id='keys'></textarea>
 			</div>
-			<div class="text-area right">
+			<div class="text-area left">
 				<h2 class='input-title'>Text</h2>
 				<textarea id='text'></textarea>
+			</div>
+			<div class="text-area left">
+				<h2  class='input-title'>Found Keys</h2>
+				<textarea id='found-keys'></textarea>
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -128,21 +144,9 @@ text.shadow {
 			<button id="match">match</button>
 			<button id="clear">clear</button>
 		</div>
-
-		<div class='text-container'>
-			<div class="text-area left">
-				<h2  class='input-title'>Found Keys</h2>
-				<textarea id='found-keys'></textarea>
-			</div>
-			<div class="text-area right">
-				<h2 class='input-title'>Graph Code</h2>
-				<textarea id='graph-data'></textarea>
-			</div>
-			<div class="clear"></div>
-		</div>
 		
 		<div id='graph'></div>
 	</div>
-
+</div>
 </body>
 </html>
