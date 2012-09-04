@@ -90,12 +90,12 @@ path.link.fail {
 }
 
 circle {
-	fill: #ccc;
+	fill: white;
 	stroke: #333;
 	stroke-width: 1.5px;
 }
 circle.final {
-	stroke-width: 3px;
+	fill: yellow;
 }
 
 text {
@@ -110,7 +110,8 @@ text.shadow {
 }
 
 .focus {
-	stroke-width: 5px;
+	stroke: red;
+	stroke-width: 3px;
 }
 </style>
 </head>
@@ -136,11 +137,18 @@ text.shadow {
 		
 		<div class='button-container'>
 			<button id="gentrie">gentrie</button>
-			<button id="genfail">genfail</button>
-			<button id="genreport">genreport</button>
+			<button id="toggle-fail">toggle-fail</button>
+			<button id="toggle-report">toggle-report</button>
 			<button id="genall">genall</button>
+			<button id="forwardCompile">compile>></button>
+			<button id="backCompile">compile&lt;&lt;</button>
+			<button id="forwardMatch">match>></button>
+			<button id="backMatch">match&lt;&lt;</button>
 			<button id="match">match</button>
 			<button id="clear">clear</button>
+		</div>
+		<div>
+			<span>MathInfo: </span><span id='match-info'></span>
 		</div>
 		
 		<div id='graph'></div>
