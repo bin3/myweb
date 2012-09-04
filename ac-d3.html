@@ -47,8 +47,8 @@ h2 {
     border-width: 1px;
     font-family: Monaco,Courier,"DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
     font-size: 12px;
-    height: 100px;
-    margin: 10px;
+    height: 150px;
+    margin: 5px;
     width: 96%;
 }
 .left {
@@ -136,19 +136,20 @@ text.shadow {
 		</div>
 		
 		<div class='button-container'>
-			<button id="gentrie">gentrie</button>
-			<button id="toggle-fail">toggle-fail</button>
-			<button id="toggle-report">toggle-report</button>
-			<button id="genall">genall</button>
+			<button id="gentrie">GenTrie</button>
+			<button id="genall">GenAC</button>
+			<button id="toggle-fail">ToggleFail</button>
+			<button id="toggle-report">ToggleReport</button>
+			<button id="match">Match</button>
+			<button id="clear">Clear</button>
+			<span> | </span>
 			<button id="forwardCompile">compile>></button>
 			<button id="backCompile">compile&lt;&lt;</button>
 			<button id="forwardMatch">match>></button>
 			<button id="backMatch">match&lt;&lt;</button>
-			<button id="match">match</button>
-			<button id="clear">clear</button>
-		</div>
-		<div>
-			<span>MathInfo: </span><span id='match-info'></span>
+			<span> | </span>
+			<span class='text-area'>CurrentChar </span>
+			<span id='match-info'></span>
 		</div>
 		
 		<div id='graph'></div>

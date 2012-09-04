@@ -30,6 +30,7 @@ balgo.ac = {
 		var text_ = '';
 		var match_trace_ = [];
 		var match_idx_ = -1;
+		var match_keys_ = [];
 		
 		this.insert = function (key) {
 //			console.log('insert key: ' + key);
@@ -92,8 +93,6 @@ balgo.ac = {
 			for (; bfs_idx < bfs_nodes.length; ++bfs_idx) {
 				var node = bfs_nodes[bfs_idx];
 				if (node.fail != root) {
-//					var circle = $('#' + nodeId(node) + ' circle').addClass('focus');
-//					console.log(circle);
 					$('#' + edgeId(node, node.fail, 'fail')).show('slow');
 					if (node.report) {
 						$('#' + edgeId(node, node.report, 'report')).show('slow');
@@ -116,21 +115,28 @@ balgo.ac = {
 			}
 		};
 		
-		this.match = function (text) {
-			console.log('match key:' + text);
-			text_ = text;
+		function matchTrace(tidx, node, nkeys) {
+			return {'tidx': tidx, 'node': node, 'nkeys': nkeys};
+		}
+		function clearMathTrace() {
+			clearMatchInfo(match_idx_);
 			match_trace_ = [];
 			match_idx_ = -1;
+			match_keys_ = [];
+		}
+		this.match = function (text) {
+			console.log('match text:' + text);
+			clearMathTrace();
+			text_ = text;
 			
 			var keys = [];
 			var cur = root;
-//			match_trace_.push({'tidx': 0, 'node': cur});
 			for (var i = 0; i < text.length; ++i) {
 				c = text[i];
-				match_trace_.push({'tidx': i, 'node': cur});
+				match_trace_.push(matchTrace(i, cur, keys.length));
 				while (!(c in cur.children) && cur != root) {
 					cur = cur.fail;
-					match_trace_.push({'tidx': i, 'node': cur});
+					match_trace_.push(matchTrace(i, cur, keys.length));
 				}
 				if (c in cur.children) {
 					cur = cur.children[c];
@@ -143,10 +149,11 @@ balgo.ac = {
 						rp = rp.report;
 					}
 				}
-//				match_trace_.push({'tidx': i, 'node': cur});
 			}
-			match_trace_.push({'tidx': text.length, 'node': cur});
+			match_trace_.push(matchTrace(text.length, cur, keys.length));
+			match_keys_ = keys;
 			console.log(match_trace_);
+			console.log(match_keys_);
 			return keys;
 		};
 		function addClass(selector, cls) {
@@ -158,13 +165,22 @@ balgo.ac = {
 			$(selector).attr('class', new_class);
 		}
 		function updateMatchInfo(match_idx) {
-			console.log(match_idx);
+			console.log('match_idx=' + match_idx);
 			if (match_idx < 0 || match_idx >= match_trace_.length) return;
+			if (match_idx == 0) {
+				$('#found-keys').val('');
+			}
 			var trace = match_trace_[match_idx];
 			var ch = (trace.tidx < text_.length) ? text_[trace.tidx] : '';
 			$('#match-info').text('[' + trace.tidx + '] ' + ch);
 			var selector = '#' + nodeId(trace.node) + ' circle';
 			addClass(selector, 'focus');
+			// update Found Keys area
+			var found_keys = '';
+			for (var i = 0; i < trace.nkeys; ++i) {
+				found_keys +=  match_keys_[i][0] + ', ' + match_keys_[i][1] + '\n';
+			}
+			$('#found-keys').val(found_keys);
 		}
 		function clearMatchInfo(match_idx) {
 			if (match_idx < 0 || match_idx >= match_trace_.length) return;
@@ -317,21 +333,6 @@ function drawTrie(svg, json, edges) {
 		.text(function(d) { return d.name; });
 }
 
-function showfail(svg) {
-	svg.selectAll('path.fail').attr('visibility', 'visible');
-}
-
-function toggle(svg, selector) {
-	svg.selectAll(selector).attr('visibility', function(d) {
-		if (this.getAttribute('visibility') == 'hidden') {
-			return 'visible';
-		} else {
-			return 'hidden';
-		}
-	});
-//	.transition().delay(delay);
-}
-
 function initSvg() {
 	var svg = d3.select("#graph").append("svg").attr("width", width).attr(
 			"height", height);
@@ -351,51 +352,42 @@ function initSvg() {
 	    .attr("orient", "auto")
 	  .append("svg:path")
 	    .attr("d", "M0,-5L10,0L0,5");
-	
-//	var g = svg.append('g').attr('class', 'tree');
 	return svg;
-}
-
-function insert() {
-	var text = $('#keys').val();
-	var keys = text.split('\n');
-	keys.forEach(matcher.insert);
 }
 	
 $(document).ready(function(){
 	console.log('AC demo started');
 
 	var svg = initSvg();
+	var matcher = new balgo.ac.Matcher();
 
 //	$('#keys').val('abc\nbc\nb');
 //	$('#text').val('abcd');
 	$('#keys').val('南京\n南京市\n南京市长\n市长\n江大桥\n长江\n大桥\n长江大桥');
 	$('#text').val('南京市长江大桥');
 	
-	//ac = new balgo.ac();
-	//matcher = new ac.Matcher();
-	matcher = new balgo.ac.Matcher();
+	function clear() {
+		matcher.clear();
+		clearTree(svg);
+	}
+	function insert() {
+		var text = $('#keys').val();
+		var keys = text.split('\n');
+		keys.forEach(matcher.insert);
+	}
 	
-	$('#insert').click(function() {
-	});
-	$('#compile').click(function() {
-		matcher.compile();
-	});
-	$('#match').click(function() {
-		var text = $('#text').val();
-		var keys = matcher.match(text);
-		console.log(keys);
-		var keystr = '';
-		keys.forEach(function(key) { keystr += key.toString() + '\n'; });
-		$('#found-keys').val(keystr);
-	});
-
 	$('#gentrie').click(function() {
+		clear();
 		insert();
 		matcher.compile();
 		
 		var data = matcher.treeData();
 		drawTrie(svg, data.json, data.edges);
+	});
+	$('#genall').click(function() {
+		$('#gentrie').click();
+		$('path.fail').show();
+		$('path.report').show();
 	});
 	$('#toggle-fail').click(function() {
 		$('path.fail').toggle();
@@ -404,10 +396,16 @@ $(document).ready(function(){
 		$('path.report').toggle();
 	});
 
-	$('#genall').click(function() {
-		$('#gentrie').click();
-		$('path.fail').show();
-		$('path.report').show();
+	$('#match').click(function() {
+		var text = $('#text').val();
+		var keys = matcher.match(text);
+		console.log(keys);
+		var keystr = '';
+		keys.forEach(function(key) { keystr += key.toString() + '\n'; });
+		$('#found-keys').val(keystr);
+	});
+	$('#clear').click(function() {
+		clear();
 	});
 	
 
@@ -424,10 +422,6 @@ $(document).ready(function(){
 		matcher.backMatch();
 	});
 	
-	$('#clear').click(function() {
-		matcher.clear();
-		clearTree(svg);
-	});
 	
 	// debug
 	$('#gentrie').click();
