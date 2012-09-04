@@ -151,56 +151,6 @@ function clearTree(svg) {
 	svg.selectAll('g.tree').remove();	
 }
 
-function drawTree(svg, json, edges) {
-	clearTree(svg);
-	
-	var gtree = svg.append('g').attr('class', 'tree');
-	var nodes = tree.nodes(json);
-	// Normalize for fixed-depth.
-	nodes.forEach(function(d) { d.y = radius + d.depth * level_height; });
-	
-//	console.log(nodes);
-//	console.log(tree.links(nodes));
-//	console.log(edges);
-	
-	var id2node = {};
-	nodes.forEach(function(node) { id2node[node.name] = node; });
-//	console.log(id2node);
-	var links = gtree.selectAll("path.link").data(edges)
-		.enter().append("path")
-		.attr("class", function(d) { return "link " + d.type;})
-	    .attr("marker-end", function(d) { return "url(#" + d.type + ")"; })
-	    .attr("d", function(d) {
-	    	var src = id2node[d.source];
-	    	var tgt = id2node[d.target];
-	    	if (d.type == 'fail') {
-	    		var dx = tgt.x - src.x,
-	            dy = tgt.y - src.y,
-	            dr = 2 * Math.sqrt(dx * dx + dy * dy);
-	    		return "M" + src.x + "," + src.y + "A" + dr + "," + dr + " 0 0,1 " + tgt.x + "," + tgt.y;
-	    	} else if (d.type == 'report') {
-	    		var dx = tgt.x - src.x,
-	            dy = tgt.y - src.y,
-	            dr = 2 * Math.sqrt(dx * dx + dy * dy);
-	    		return "M" + src.x + "," + src.y + "A" + dr + "," + dr + " 0 0,0 " + tgt.x + "," + tgt.y;
-	    	}
-	    	return "M" + src.x + "," + src.y + " L" + tgt.x + "," + tgt.y;
-	  });
-	
-	var node = gtree.selectAll("g.node")
-		.data(nodes, function(d) { return d.name; })
-		.enter().append("g")
-		.attr("class", "node")
-		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-
-	node.append("circle").attr("r", radius);
-
-	node.append("text").attr("dx", 0)
-		.attr("dy", 4)
-		.attr("text-anchor", function(d) { return "middle"; })
-		.text(function(d) { return d.name; });
-}
-
 function drawTrie(svg, json, edges) {
 	clearTree(svg);
 	
@@ -288,26 +238,29 @@ function initSvg() {
 //	var g = svg.append('g').attr('class', 'tree');
 	return svg;
 }
+
+function insert() {
+	var text = $('#keys').val();
+	//console.log(text);
+	var keys = text.split('\n');
+	keys.forEach(matcher.insert);
+}
 	
 $(document).ready(function(){
 	console.log('AC demo started');
 
 	var svg = initSvg();
 	
-//	$('#keys').val('abcd\nbc\n码农\n码农abc\n农\n我是码农');
-//	$('#text').val('码农啊abcd');
-	$('#keys').val('abc\nbc\nb');
-	$('#text').val('abcd');
+	$('#keys').val('abcd\nbc\n码农\n码农abc\n农\n我是码农');
+	$('#text').val('码农啊abcd');
+//	$('#keys').val('abc\nbc\nb');
+//	$('#text').val('abcd');
 	
 	//ac = new balgo.ac();
 	//matcher = new ac.Matcher();
 	matcher = new balgo.ac.Matcher();
 	
 	$('#insert').click(function() {
-		var text = $('#keys').val();
-		//console.log(text);
-		var keys = text.split('\n');
-		keys.forEach(matcher.insert);
 	});
 	$('#compile').click(function() {
 		matcher.compile();
@@ -320,18 +273,10 @@ $(document).ready(function(){
 		keys.forEach(function(key) { keystr += key.toString() + '\n'; });
 		$('#found-keys').val(keystr);
 	});
-	$('#gentree').click(function() {
-		// debug
-		$('#insert').click();
-		$('#compile').click();
-		
-		var data = matcher.treeData();
-		drawTree(svg, data.json, data.edges);
-	});
 
 	$('#gentrie').click(function() {
-		$('#insert').click();
-		$('#compile').click();
+		insert();
+		matcher.compile();
 		
 		var data = matcher.treeData();
 		drawTrie(svg, data.json, data.edges);
@@ -342,6 +287,13 @@ $(document).ready(function(){
 	$('#genreport').click(function() {
 		toggle(svg, 'path.report');
 	});
+
+	$('#genall').click(function() {
+		$('#gentrie').click();
+		$('#genfail').click();
+		$('#genreport').click();
+	});
+	
 	$('#clear').click(function() {
 		matcher.clear();
 		clearTree(svg);
