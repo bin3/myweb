@@ -1,0 +1,21 @@
+﻿<chart caption="粉丝个性标签分布" xAxisName="个性标签" yAxisName="粉丝数" numberPrefix="" showValues="1" useRoundEdges="1" labelDisplay="AUTO" showToolTip="1" baseFont="Arial" baseFontSize="12" baseFontColor="000000" showBorder="1">   
+    <styles>
+        <definition>
+            <style name="CanvasAnim" type="animation" param="_xScale" start="0" duration="1"/>
+            <style name="myCaptionFont" type="font" font="Arial" size="18" color="666666" bold="1"/>                            <style name="myShadow" type="Shadow" color="999999" angle="45"/>
+            <style name="myGlow" type="Shadow" color="999999"/>
+            <style name="myAxis" type="font" font="Arial" size="12" color="666666" bold="1"/>   
+            <style name="myToolTipFont" type="font" font="Arial" size="12" color="FF5904"/>
+        </definition>
+        <application>
+            <apply toObject="Caption" styles="myCaptionFont,myShadow"/>
+            <apply toObject="SubCaption" styles="myShadow"/>
+            <apply toObject="XAxisName" styles="myGlow"/>
+            <apply toObject="YAxisName" styles="myGlow"/>
+            <apply toObject="XAxisName" styles="myAxis"/>
+            <apply toObject="YAxisName" styles="myAxis"/>
+            <apply toObject="Canvas" styles="CanvasAnim"/>
+            <apply toObject="ToolTip" styles="myToolTipFont"/>
+        </application>
+     </styles>
+<set label="NLP" value="23"/><set label="信息检索" value="13"/><set label="IT" value="6"/><set label="互联网" value="6"/><set label="80后" value="5"/><set label="电影" value="4"/><set label="NLP" value="4"/><set label="足球" value="4"/><set label="网购" value="4"/><set label="购物" value="3"/><set label="自由" value="3"/><set label="哈工大" value="3"/><set label="信息抽取" value="3"/><set label="音乐" value="3"/><set label="机器学习" value="3"/><set label="旅游" value="2"/><set label="摄影" value="2"/><set label="美容" value="2"/><set label="搜索引擎" value="2"/><set label="天秤座" value="2"/><set label="美食" value="2"/></chart>

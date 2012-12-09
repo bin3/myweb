@@ -1,0 +1,51 @@
+﻿<map animation='1' showShadow='1' showMarkerLabels='1' includeValueInLabels='1' fillColor='F1f1f1' borderColor='000000' baseFont='Arial' baseFontSize='12' baseFontColor='000000' markerBorderColor='000000' markerBgColor='FF5904' markerRadius='0' legendPosition='right' useHoverColor='1' showMarkerToolTip='1' exportEnabled='1' exportAtClient='0' exportAction='download' exportHandler='/ExportHandlers/FCExporter.php' exportFileName='MyFileName' >
+        <colorRange>
+           <color minValue='0' maxValue='5' displayValue='0%~5%' color='FFFFCC' />
+           <color minValue='5' maxValue='15' displayValue='5%~15%' color='D7F4FF' />
+           <color minValue='15' maxValue='25' displayValue='15%~25%' color='FFCCFF' />
+           <color minValue='25' maxValue='35' displayValue='25%~35%' color='A7E9BC' />
+           <color minValue='35' maxValue='45' displayValue='35%~45%' color='999FFF' />
+           <color minValue='45' maxValue='55' displayValue='45%~55%' color='ABF456' />
+           <color minValue='55' maxValue='65' displayValue='55%~65%' color='FF9377' />
+           <color minValue='65' maxValue='75' displayValue='65%~75%' color='069F06' />
+           <color minValue='75' maxValue='85' displayValue='75%~85%' color='CC0001' />
+           <color minValue='85' maxValue='101' displayValue='85%~100%' color='990066' />
+        </colorRange>
+
+	<data>
+		<entity id='CN.AH' value='100' displayValue='安徽' toolText='安徽:10%'  />
+		<entity id='CN.BJ' displayValue='北京'  />
+		<entity id='CN.CQ' displayValue='重庆'  />
+		<entity id='CN.FJ' displayValue='福建'  />
+		<entity id='CN.GS' displayValue='甘肃'  />
+		<entity id='CN.GD' displayValue='广东'  />
+		<entity id='CN.GX' displayValue='广西'  />
+		<entity id='CN.GZ' displayValue='贵州'  />
+		<entity id='CN.HA' displayValue='海南'  />
+		<entity id='CN.HB' displayValue='河北'  />
+		<entity id='CN.HE' displayValue='河南'  />
+		<entity id='CN.HU' displayValue='湖北'  />
+		<entity id='CN.HL' displayValue='黑龙江'  />
+		<entity id='CN.HN' displayValue='湖南'  />
+		<entity id='CN.JS' displayValue='江苏'  />
+		<entity id='CN.JX' displayValue='江西'  />
+		<entity id='CN.JL' displayValue='吉林'  />
+		<entity id='CN.LN' displayValue='辽宁'  />
+		<entity id='CN.NM' displayValue='内蒙古'  />
+		<entity id='CN.NX' displayValue='宁夏'  />
+		<entity id='CN.QH' displayValue='青海'  />
+		<entity id='CN.SA' displayValue='陕西'  />
+		<entity id='CN.SD' displayValue='山东'  />
+		<entity id='CN.SH' displayValue='上海'  />
+		<entity id='CN.SX' displayValue='山西'  />
+		<entity id='CN.SC' displayValue='四川'  />
+		<entity id='CN.TJ' displayValue='天津'  />
+		<entity id='CN.XJ' displayValue='新疆'  />
+		<entity id='CN.XZ' displayValue='西藏'  />
+		<entity id='CN.YN' displayValue='云南'  />
+		<entity id='CN.ZJ' displayValue='浙江'  />
+		<entity id='CN.MA' displayValue='澳门'  />
+		<entity id='CN.HK' displayValue='香港'  />
+		<entity id='CN.TA' displayValue='台湾'  />
+	</data>
+</map>

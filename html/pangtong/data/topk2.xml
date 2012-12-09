@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+   <slogan>通过 @围脖庞统 计算出我的关注排行榜， @主持人袁哲 最具影响力，价值最大，你也来试试吧。( http://t.cn/hrkNIm )</slogan>
+   <data>
+   <chart yAxisName="用户" xAxisName="粉丝数" caption="用户影响力">
+   <set label="主持人袁哲" value="27458" link="http://t.sina.com.cn/1749840923"/>
+   <set label="财经观察者江南" value="30866" link="http://t.sina.com.cn/1986288542"/>
+   <set label="哈尔滨市旅游局" value="84776" link="http://t.sina.com.cn/1685946612"/>
+   <set label="王影警察" value="86810" link="http://t.sina.com.cn/1998979453"/>
+   <set label="黑龙江省公安网安总队" value="87265" link="http://t.sina.com.cn/1911306251"/>
+   <set label="中国之声苏扬" value="95537" link="http://t.sina.com.cn/1828951263"/>
+   <set label="深圳茅台红钻官方微博" value="127065" link="http://t.sina.com.cn/1913624334"/>
+   <set label="毛剑卿" value="157925" link="http://t.sina.com.cn/1649393195"/>
+   </chart></data>
+</response>

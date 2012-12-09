@@ -1,0 +1,21 @@
+﻿<chart caption="关注最多的人" xAxisName="关注数" yAxisName="我的粉丝" numberPrefix="" showValues="1" useRoundEdges="1" labelDisplay="AUTO" showToolTip="1">   
+    <styles>
+        <definition>
+            <style name="CanvasAnim" type="animation" param="_xScale" start="0" duration="1"/>
+            <style name="myCaptionFont" type="font" font="Arial" size="18" color="666666" bold="1"/>                            <style name="myShadow" type="Shadow" color="999999" angle="45"/>
+            <style name="myGlow" type="Shadow" color="999999"/>
+            <style name="myAxis" type="font" font="Arial" size="12" color="666666" bold="1"/>   
+            <style name="myToolTipFont" type="font" font="Arial" size="12" color="FF5904"/>
+        </definition>
+        <application>
+            <apply toObject="Caption" styles="myCaptionFont,myShadow"/>
+            <apply toObject="SubCaption" styles="myShadow"/>
+            <apply toObject="XAxisName" styles="myGlow"/>
+            <apply toObject="YAxisName" styles="myGlow"/>
+            <apply toObject="XAxisName" styles="myAxis"/>
+            <apply toObject="YAxisName" styles="myAxis"/>
+            <apply toObject="Canvas" styles="CanvasAnim"/>
+            <apply toObject="ToolTip" styles="myToolTipFont"/>
+        </application>
+     </styles>
+<set label="绿风袭人" value="1998"/><set label="杨紫后援会官方微博" value="1997"/><set label="翠凝春" value="1969"/><set label="双朕得" value="1832"/><set label="莫华伦" value="1676"/><set label="oioioi30" value="1591"/><set label="处女洗澡非诚勿扰" value="1573"/><set label="吴川讨论区" value="1520"/><set label="拉近你我他" value="1375"/><set label="美国空间2010" value="1366"/><set label="Handsome_steven" value="917"/><set label="函谷天涯" value="842"/><set label="_Bieber" value="775"/><set label="w19621004" value="716"/><set label="东邮网电子商务平台" value="609"/><set label="立立Jessic叶子工作室" value="525"/><set label="付饶1988" value="473"/><set label="紫蝶霓裳" value="470"/><set label="墨水先生" value="417"/><set label="芭比屋婷婷" value="358"/><set label="此行_为止" value="350"/><set label="围博就这样" value="280"/><set label="zebras_寂寞的江水" value="268"/><set label="再御仙剑" value="251"/><set label="peterTANGHKCN" value="241"/><set label="我话左我唔系猥浦" value="221"/><set label="薯仔兄" value="189"/><set label="Tracytengpop" value="171"/><set label="TITA妞儿" value="166"/><set label="傲娇社长SAMA" value="161"/><set label="流浪的HBR" value="152"/><set label="虹1104" value="146"/><set label="黄家小媳" value="145"/><set label="我主疯啦" value="145"/><set label="东方蓝蓝" value="144"/><set label="过往的季节" value="131"/><set label="SUNNIE_小晴" value="130"/><set label="读心飞明" value="109"/><set label="Sun_Butterfly" value="63"/><set label="立川" value="61"/><set label="mine-h" value="58"/><set label="WS田心" value="35"/><set label="给力创新" value="32"/><set label="fenyuat" value="29"/><set label="亚诺_Xie" value="18"/><set label="王猛玩蛋去" value="3"/></chart>

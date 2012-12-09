@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+	<url />
+	<slogan>通过 @围脖庞统 计算我的热词，发现我的微博中暂无热门词汇，你也来试试吧。( http://t.cn/hrkNIm )
+	</slogan>
+	<data>
+		<tags>
+			<a href="http://onhoo.com/work/" style="font-size: 12pt;" color="0x00000"
+				hicolor="0x00000">昂虎设计</a>
+			<a href="http://www.onhoo.com/Logo/" style="font-size: 4pt;">ONHOO LOGOS</a>
+			<a href="http://www.onhoo.com/" style="font-size: 16.5pt;" color="0xE00001"
+				hicolor="0xE00001" tip="Onhoo tip">Onhoo!</a>
+			<a href="http://ir.hit.edu.cn" style="font-size: 100pt;" color="0x00000"
+				hicolor="0x00000" tip="HIT-CIR">哈尔滨工业大学信息检索研究中心 </a>
+			<a href="http://ir.hit.edu.cn/~wbzhang" style="font-size: 100pt;"
+				color="0x00000" hicolor="0x00000" tip="a nice man">bin3@HIT-CIR</a>
+			<a href="http://ir.hit.edu.cn/~wbzhang" style="font-size: 100pt;"
+				color="0x00000" hicolor="0x00000">bin3</a>
+		</tags>
+	</data>
+</response>
