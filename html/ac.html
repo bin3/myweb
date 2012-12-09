@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<title>AC Demo</title>
+
+<script type="text/javascript" src="../javascripts/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="../javascripts/d3.v2.js"></script>
+<script type="text/javascript" src="../javascripts/ac.js"></script>
+<style type="text/css">
+#main-container {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+    width: 1000px;
+}
+h2 {
+	margin: 5px;
+}
+#text-container {
+}
+.text-area {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #E9E9E9;
+    border-color: #D9D9D9 #D9D9D9 -moz-use-text-color;
+    border-style: solid solid none;
+    border-width: 1px 1px medium;
+    color: #666666;
+    font-size: 12px;
+    padding: 5px;
+    width: 30%;
+    margin: 5px;
+}
+.text-area textarea {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #CCCCCC #DDDDDD #DDDDDD #CCCCCC;
+    border-style: solid;
+    border-width: 1px;
+    font-family: Monaco,Courier,"DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
+    font-size: 12px;
+    height: 150px;
+    margin: 5px;
+    width: 96%;
+}
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+.clear { clear: both;}
+.input-title {
+    border-bottom: 1px solid #DDDDDD;
+    margin: 0px;
+}
+.button-container {
+	margin: 10px;
+	font-size: 14px;
+}
+
+/*---for d3---*/
+path.link {
+	fill: none;
+	stroke: #666;
+	stroke-width: 1.5px;
+}
+
+marker#report {
+	fill: green;
+}
+marker#normal {
+	fill: black;
+}
+
+path.link.report {
+	stroke: green;
+}
+
+path.link.fail {
+	stroke-dasharray: 0, 2 1;
+}
+
+circle {
+	fill: white;
+	stroke: #333;
+	stroke-width: 1.5px;
+}
+circle.final {
+	fill: yellow;
+}
+
+text {
+	font: 14px sans-serif;
+	pointer-events: none;
+}
+
+text.shadow {
+	stroke: #fff;
+	stroke-width: 3px;
+	stroke-opacity: .8;
+}
+
+.focus {
+	stroke: red;
+	stroke-width: 3px;
+}
+</style>
+</head>
+<body>
+<div id='main-container'>
+	<h2>Animated Aho–Corasick Algorithm</h2>
+	<div>
+		<div id='text-container'>
+			<div class="text-area left">
+				<h2 class='input-title'>Keys</h2>
+				<textarea id='keys'></textarea>
+			</div>
+			<div class="text-area left">
+				<h2 class='input-title'>Text</h2>
+				<textarea id='text'></textarea>
+			</div>
+			<div class="text-area left">
+				<h2  class='input-title'>Found Keys</h2>
+				<textarea id='found-keys'></textarea>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<div class='button-container'>
+			<button id="gentrie">GenTrie</button>
+			<button id="genall">GenAC</button>
+			<button id="toggle-fail">ToggleFail</button>
+			<button id="toggle-report">ToggleReport</button>
+			<button id="match">Match</button>
+			<button id="clear">Clear</button>
+			<span> | </span>
+			<button id="forwardCompile">compile>></button>
+			<button id="backCompile">compile&lt;&lt;</button>
+			<button id="forwardMatch">match>></button>
+			<button id="backMatch">match&lt;&lt;</button>
+			<span> | </span>
+			<span class='text-area'>CurrentChar </span>
+			<span id='match-info'></span>
+		</div>
+		
+		<div id='graph'></div>
+	</div>
+</div>
+</body>
+</html>
